@@ -119,6 +119,223 @@ public class ClienteDAO {
         }
         return clientes;
     }
+
+    public List<Cliente> obtenerMayoresDe30() {
+        List<Cliente> clientes = new ArrayList<>();
+        String sql = "SELECT * FROM clientes WHERE edad > 30";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente a = new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getString("telefono"),
+                        rs.getInt("edad"),
+                        rs.getDouble("dinero_gastado"),
+                        rs.getInt("productos_comprados")
+                );
+                clientes.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al filtrar por edad 😿: " + e.getMessage());
+        }
+        return clientes;
+    }
+
+    public List<Cliente> obtenerGastanMasDe500() {
+        List<Cliente> clientes = new ArrayList<>();
+        // Filtramos por la columna dinero_gastado
+        String sql = "SELECT * FROM clientes WHERE dinero_gastado > 500";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente a = new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getString("telefono"),
+                        rs.getInt("edad"),
+                        rs.getDouble("dinero_gastado"),
+                        rs.getInt("productos_comprados")
+                );
+                clientes.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al filtrar por gasto 😿: " + e.getMessage());
+        }
+        return clientes;
+    }
+
+    public List<Cliente> obtenerTop3Compradores() {
+        List<Cliente> clientes = new ArrayList<>();
+        String sql = "SELECT * FROM clientes ORDER BY productos_comprados DESC LIMIT 3";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente a = new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getString("telefono"),
+                        rs.getInt("edad"),
+                        rs.getDouble("dinero_gastado"),
+                        rs.getInt("productos_comprados")
+                );
+                clientes.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el Top 3 😿: " + e.getMessage());
+        }
+        return clientes;
+    }
+
+    public double obtenerSumaTotalGastada() {
+        double total = 0;
+        String sql = "SELECT SUM(dinero_gastado) FROM clientes";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al calcular la suma total 😿: " + e.getMessage());
+        }
+        return total;
+    }
+
+    public double obtenerMediaProductos() {
+        double media = 0;
+        String sql = "SELECT AVG(productos_comprados) FROM clientes";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                media = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al calcular la media de productos 😿: " + e.getMessage());
+        }
+        return media;
+    }
+
+    public double obtenerMediaGastoFiltrado() {
+        double media = 0;
+        String sql = "SELECT AVG(dinero_gastado) FROM clientes WHERE edad > 25 AND productos_comprados > 3";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                media = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al calcular media filtrada 😿: " + e.getMessage());
+        }
+        return media;
+    }
+
+    public int contarClientesGastoMayor100() {
+        int cantidad = 0;
+        String sql = "SELECT COUNT(*) FROM clientes WHERE dinero_gastado > 100";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                cantidad = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar clientes 😿: " + e.getMessage());
+        }
+        return cantidad;
+    }
+
+    public int contarClientesEntre30y50() {
+        int cantidad = 0;
+        // BETWEEN incluye tanto el 30 como el 50
+        String sql = "SELECT COUNT(*) FROM clientes WHERE edad BETWEEN 30 AND 50";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                cantidad = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar clientes por rango de edad 😿: " + e.getMessage());
+        }
+        return cantidad;
+    }
+
+    public List<Cliente> obtenerGastanMas200OrdenadosPorProductos() {
+        List<Cliente> clientes = new ArrayList<>();
+        String sql = "SELECT * FROM clientes WHERE dinero_gastado > 200 ORDER BY productos_comprados ASC";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente a = new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getString("telefono"),
+                        rs.getInt("edad"),
+                        rs.getDouble("dinero_gastado"),
+                        rs.getInt("productos_comprados")
+                );
+                clientes.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error en la consulta combinada 😿: " + e.getMessage());
+        }
+        return clientes;
+    }
+
+    public Cliente obtenerClienteMasJovenGasto400() {
+        Cliente cliente = null;
+        String sql = "SELECT * FROM clientes WHERE dinero_gastado > 400 ORDER BY edad ASC LIMIT 1";
+
+        try (Connection conn = getConnection(url)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                cliente = new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getString("telefono"),
+                        rs.getInt("edad"),
+                        rs.getDouble("dinero_gastado"),
+                        rs.getInt("productos_comprados")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar al más manirroto 😿: " + e.getMessage());
+        }
+        return cliente;
+    }
+
 }
 
 
