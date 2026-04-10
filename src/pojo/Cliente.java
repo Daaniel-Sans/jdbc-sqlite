@@ -1,4 +1,4 @@
-package POJO;
+package pojo;
 
 public class Cliente {
     private int id;
@@ -11,6 +11,16 @@ public class Cliente {
 
     public Cliente(int id, String nombre, String email, String telefono, int edad, double dineroGastado, int productosComprados) {
         this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+        this.edad = edad;
+        this.dineroGastado = dineroGastado;
+        this.productosComprados = productosComprados;
+    }
+
+    //Este constructor sin ID como parámetro lo necesito para manejar su autoincrement en el Main
+    public Cliente(String nombre, String email, String telefono, int edad, double dineroGastado, int productosComprados) {
         this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
