@@ -1,19 +1,16 @@
 package dao;
-
 import pojo.Cliente;
-
 import java.sql.*;
-
 import static java.sql.DriverManager.getConnection;
 
 public class ClienteDAO {
     private String url = "jdbc:sqlite:prueba.sqlite3";
 
     public void insertarCliente(Cliente a) {
+        String sql = "INSERT INTO clientes (nombre, email, telefono, edad, dinero_gastado, productos_comprados) VALUES (?,?,?,?,?,?)";
+        try (Connection conn = getConnection(url);
+        PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        try (Connection conn = getConnection(url)) {
-            String sql = "INSERT INTO clientes (nombre, email, telefono, edad, dinero_gastado, productos_comprados) VALUES (?,?,?,?,?,?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, a.getNombre());
             pstmt.setString(2, a.getEmail());
             pstmt.setString(3, a.getTelefono());
@@ -68,7 +65,33 @@ public class ClienteDAO {
         }
     }
 
+    public Cliente obtenerClientePorId (int id) {
+        String sql = "SELECT * FROM clientes WHERE id = ?";
+        Cliente clienteEncontrado = null;
 
+        try(Connection conn = getConnection(url);
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+
+            try(ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    clienteEncontrado = new Cliente(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("email"),
+                            rs.getString("telefono"),
+                            rs.getInt("edad"),
+                            rs.getDouble("dinero_gastado"),
+                            rs.getInt("productos_comprados")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("No se pudo encontrar al cliente por id. Hubo un error" + e.getMessage());
+        }
+
+        return clienteEncontrado;
+    }
 
 }
 

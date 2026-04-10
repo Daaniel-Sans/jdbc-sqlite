@@ -4,7 +4,6 @@ import pojo.Cliente;
 public class Main {
     public static void main (String [] args) {
         ClienteDAO clienteDAO = new ClienteDAO();
-        clienteDAO.borrar(11);
 
         System.out.println("\n Insertar cliente");
         Cliente a = new Cliente("Ramiro Ramirez", "ramiroramirez@gmail.com", "999888777", 82, 20.50, 2);
@@ -21,5 +20,13 @@ public class Main {
         clienteDAO.borrar(a.getId());
 
         System.out.println("\n✅ Cliente borrado. Esto no ha pasado... 🥷");
+
+        Cliente encontrado = clienteDAO.obtenerClientePorId(1);
+
+        if (encontrado != null) {
+            System.out.println("Encontrado: " + encontrado.getNombre() + " por su id #" + encontrado.getId());
+        } else {
+            System.out.println("Cliente no encontrado.");
+        }
     }
 }
