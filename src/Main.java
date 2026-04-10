@@ -1,8 +1,10 @@
 import dao.ClienteDAO;
 import pojo.Cliente;
 
+import java.util.List;
+
 public class Main {
-    public static void main (String [] args) {
+    public static void main(String[] args) {
         ClienteDAO clienteDAO = new ClienteDAO();
 
         System.out.println("\n Insertar cliente");
@@ -27,6 +29,12 @@ public class Main {
             System.out.println("Encontrado: " + encontrado.getNombre() + " por su id #" + encontrado.getId());
         } else {
             System.out.println("Cliente no encontrado.");
+        }
+
+        System.out.println("\n🗒️ Listado de clientes \n --------------------------------------------------------------------------------------------------------------------------------------------");
+        List<Cliente> lista = clienteDAO.obtenerClientes();
+        for (Cliente c : lista) {
+            System.out.println(c);
         }
     }
 }

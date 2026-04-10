@@ -1,6 +1,9 @@
 package dao;
 import pojo.Cliente;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.sql.DriverManager.getConnection;
 
 public class ClienteDAO {
@@ -93,6 +96,29 @@ public class ClienteDAO {
         return clienteEncontrado;
     }
 
+    public List<Cliente> obtenerClientes() {
+        List<Cliente> clientes = new ArrayList<>();
+        try (Connection conn = getConnection(url)) {
+             String sql = "SELECT * FROM clientes";
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery();
+
+             while (rs.next()) {
+                 int id = rs.getInt("id");
+                 String nombre = rs.getString("nombre");
+                 String email = rs.getString("email");
+                 String telefono = rs.getString("telefono");
+                 int edad = rs.getInt("edad");
+                 double dineroGastado = rs.getDouble("dinero_gastado");
+                 int productosComprados = rs.getInt("productos_comprados");
+                 Cliente a = new Cliente(id, nombre, email, telefono, edad, dineroGastado, productosComprados);
+                 clientes.add(a);
+             }
+        }catch (SQLException e) {
+            System.out.println("Error 😿" + e.getMessage());
+        }
+        return clientes;
+    }
 }
 
 

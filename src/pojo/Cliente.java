@@ -87,4 +87,17 @@ public class Cliente {
     public void setProductosComprados(int productosComprados) {
         this.productosComprados = productosComprados;
     }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", edad=" + edad +
+                ", dineroGastado=" + dineroGastado +
+                ", productosComprados=" + productosComprados +
+                '}';
+    }
 }
